@@ -42,3 +42,23 @@ button {
 .text-field::placeholder {
   color: var(--slate-400);
 }
+.btn{
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+}
+.btn--primary{
+  background-color: var(--slate-500);
+  color: var(--slate-100);
+  font-weight: 700;
+}
+.badge{
+  white-space:nowrap;
+  padding: 0.3rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge--secondary{
+  background-color: var(--slate-600);
+}
