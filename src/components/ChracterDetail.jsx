@@ -1,8 +1,34 @@
-
+import CircularProgress from "@mui/material/CircularProgress";
 import {ArrowDownCircleIcon} from "@heroicons/react/24/outline"
-import {character, episodes} from "./../../public/data/data"
+import { episodes} from "./../../public/data/data"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import toast from "react-hot-toast"
 
-export default function ChracterDetail() {
+export default function ChracterDetail({selectedId}) {
+  const [character,setCharacter]=useState(null)
+  const [isLoding,setIsLoding]=useState(false);
+  
+  useEffect(()=>{
+    async function getData(){
+        try{
+          setIsLoding(true)
+          setCharacter(null)
+          const {data}=await axios.get(`https://rickandmortyapi.com/api/character/${selectedId}`)
+          setCharacter(data)
+          
+        }catch(err){
+          toast.error(err.response.data.error)
+        }finally{
+          setIsLoding(false)
+        }
+
+      }
+    
+    if (selectedId) getData();
+  },[selectedId])
+  if (isLoding) return <div style={{marginLeft:"22%",flex:"1"}}><CircularProgress /></div>
+  if (!character || !selectedId) return <div className="name" style={{flex:"1"}}>Search and select a Character</div>
   return (
     <div style={{flex:1}}>
       <div className="character-detail">
