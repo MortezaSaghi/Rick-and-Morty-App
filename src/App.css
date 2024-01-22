@@ -62,6 +62,8 @@
 /*------------Character List Section -----------*/
 .characters-list {
   width: 40%;
+  /* max-height: 80vh;
+  overflow: auto; */
 }
 .list__item {
   display: grid;
@@ -168,6 +170,9 @@
   background-color: var(--slate-800);
   border-radius: 1rem;
   padding: 1rem;
+  /* max-height: 50vh;
+  overflow:auto; */
+  
 }
 .character-episodes .title{
   display: flex;

@@ -51,6 +51,11 @@ button {
   color: var(--slate-100);
   font-weight: 700;
 }
+.btn--danger{
+  background-color: var(--rose-500);
+  color: var(--slate-100);
+  font-weight: 700;
+}
 .badge{
   white-space:nowrap;
   padding: 0.3rem 1rem;

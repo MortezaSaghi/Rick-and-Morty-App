@@ -12,29 +12,45 @@ function App() {
   const [characters, setCharacters] = useState([]);
   const [isLoding, setIsLoding] = useState(false);
   const [query, setQuery] = useState("");
-  const [selectedId,setSelectedId]=useState(null)
+  const [selectedId, setSelectedId] = useState(null);
+  const [favourites, setFavourates] = useState([]);
 
   const handelChangeQuery = (value) => {
     setQuery(value);
   };
 
-  const handelSelectCharacter=(id)=>{
-    setSelectedId(prevId=>prevId===id?null:id)
+  const handelSelectCharacter = (id) => {
+    setSelectedId((prevId) => (prevId === id ? null : id));
     // console.log(id);
-  }
+  };
+  
+  const isFavourite = favourites.map((fav) => fav.id).includes(selectedId);
+
+  const handelAddFavourites = (char) => {
+    if (!isFavourite) {
+      setFavourates((preFav) => [...preFav, char]);
+    } else {
+      setFavourates(favourites.filter((fav) => fav.id !== selectedId));
+    }
+  };
 
   //---------- Fechting Data
   useEffect(() => {
+    const controller= new AbortController();
+    const signal=controller.signal;
     async function getData() {
       try {
         setIsLoding(true);
         const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character?name=${query}`
+          `https://rickandmortyapi.com/api/character?name=${query}`,{signal}
         );
-        setCharacters(data.results);
+        setCharacters(data.results.slice(0, 6));
       } catch (err) {
-        setCharacters([]);
-        toast.error(err.response.data.error);
+        if(!axios.isCancel()){
+          setCharacters([]);
+          toast.error(err.response.data.error);
+        }
+        
       } finally {
         setIsLoding(false);
       }
@@ -44,6 +60,10 @@ function App() {
       return;
     }
     getData();
+    // ---- clean up fetch api  (re-redder => searchbox)
+    return ()=>{
+      controller.abort();
+    }
   }, [query]);
 
   return (
@@ -53,10 +73,20 @@ function App() {
         numOfResult={characters.length}
         query={query}
         onQuery={handelChangeQuery}
+        numOfFavourites={favourites.length}
       />
       <div className="main">
-        <CharacterList selectedId={selectedId} characters={characters} isLoding={isLoding} onSelectedCharacter={handelSelectCharacter} />
-        <ChracterDetail selectedId={selectedId} />
+        <CharacterList
+          selectedId={selectedId}
+          characters={characters}
+          isLoding={isLoding}
+          onSelectedCharacter={handelSelectCharacter}
+        />
+        <ChracterDetail
+          selectedId={selectedId}
+          handelAddFavourites={handelAddFavourites}
+          isFavourite={isFavourite}
+        />
       </div>
     </div>
   );
