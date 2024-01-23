@@ -1,11 +1,17 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Children } from "react";
 
-export default function CharacterList({ characters, isLoding ,onSelectedCharacter ,selectedId }) {
+export default function CharacterList({
+  characters,
+  isLoding,
+  onSelectedCharacter,
+  selectedId,
+}) {
   // console.log(characters);
   if (isLoding) {
     return (
-      <div className="characters-list" style={{textAlign:"center"}}>
+      <div className="characters-list" style={{ textAlign: "center" }}>
         <CircularProgress />
         <p className="name">Loding...</p>
       </div>
@@ -14,7 +20,19 @@ export default function CharacterList({ characters, isLoding ,onSelectedCharacte
   return (
     <div className="characters-list">
       {characters.map((item) => (
-        <CharacterItem key={item.id} selectedId={selectedId} item={item} onSelectedCharacter={onSelectedCharacter} />
+        <CharacterItem
+          key={item.id}
+          selectedId={selectedId}
+          item={item}
+          onSelectedCharacter={onSelectedCharacter}
+        >
+          <button
+            className="icon red"
+            onClick={() => onSelectedCharacter(item.id)}
+          >
+            {selectedId === item.id ? <EyeSlashIcon /> : <EyeIcon />}
+          </button>
+        </CharacterItem>
       ))}
     </div>
   );
@@ -22,7 +40,11 @@ export default function CharacterList({ characters, isLoding ,onSelectedCharacte
 
 // ---------  Character Item
 
-function CharacterItem({ item , onSelectedCharacter , selectedId }) {
+export function CharacterItem({
+  item,
+  
+  children,
+}) {
   return (
     <div className="list__item">
       <img src={item.image} alt={item.name} />
@@ -37,9 +59,7 @@ function CharacterItem({ item , onSelectedCharacter , selectedId }) {
         <span> {item.status}</span>
         <span> - {item.species}</span>
       </div>
-      <button className="icon red" onClick={()=>onSelectedCharacter(item.id)}>
-        {selectedId === item.id ? <EyeSlashIcon/> :<EyeIcon />}
-      </button>
+      {children}
     </div>
   );
 }

@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import CharacterList from "./components/CharacterList";
 import ChracterDetail from "./components/ChracterDetail";
 import { Toaster, toast } from "react-hot-toast";
+import Modal from "./components/Modal"
 
 function App() {
   const [characters, setCharacters] = useState([]);
@@ -26,11 +27,15 @@ function App() {
   
   const isFavourite = favourites.map((fav) => fav.id).includes(selectedId);
 
+  const handelDeleteFavourite=(id)=>{
+    setFavourates((preFavourites)=>preFavourites.filter((item) => item.id !== id));
+  }
+
   const handelAddFavourites = (char) => {
     if (!isFavourite) {
       setFavourates((preFav) => [...preFav, char]);
     } else {
-      setFavourates(favourites.filter((fav) => fav.id !== selectedId));
+      setFavourates((preFavourites)=>preFavourites.filter((fav) => fav.id !== selectedId));
     }
   };
 
@@ -69,11 +74,13 @@ function App() {
   return (
     <div className="app">
       <Toaster />
+    
       <Navbar
         numOfResult={characters.length}
         query={query}
         onQuery={handelChangeQuery}
-        numOfFavourites={favourites.length}
+        favourites={favourites}
+        onDelete={handelDeleteFavourite}
       />
       <div className="main">
         <CharacterList
