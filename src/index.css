@@ -80,13 +80,14 @@ button {
   min-width: 98%;
   min-height: 250px;
   position: absolute;
-  top: 10%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%,50%);
+  transform: translate(-50%,-50%);
   background-color: var(--slate-900);
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 1px 1px 50px var(--slate-600);
+  overflow: auto;
 }
 .modal__header{
   display: flex;
