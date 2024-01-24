@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-// import {allCharacters} from "./../public/data/data"
+import { useState } from "react";
+import useFetchCharacters from "./hooks/useFetchCharacters";
+import useLocalStorage from "./hooks/useLocalStorage";
 import "./App.css";
 // -------- import Components
 import Navbar from "./components/Navbar";
 import CharacterList from "./components/CharacterList";
 import ChracterDetail from "./components/ChracterDetail";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster} from "react-hot-toast";
 
 function App() {
-  const [characters, setCharacters] = useState([]);
-  const [isLoding, setIsLoding] = useState(false);
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const [favourites, setFavourates] = useState(
-    () => JSON.parse(localStorage.getItem("FAVOURITES")) || []
-  );
-
+  //--------------------- SET FAVOURITES ITEM LOCALSTORAGE
+  // ----------------------- Custom Hook LocalStorage
+  const [favourites, setFavourites] = useLocalStorage("FAVOURITES", []);
+  // ---------------------------- Fechting Data
+  // --------------------- Custom Hook Fetch api Characters
+  const { isLoding, characters } = useFetchCharacters(query);
   const handelChangeQuery = (value) => {
     setQuery(value);
   };
@@ -29,57 +29,20 @@ function App() {
   const isFavourite = favourites.map((fav) => fav.id).includes(selectedId);
 
   const handelDeleteFavourite = (id) => {
-    setFavourates((preFavourites) =>
+    setFavourites((preFavourites) =>
       preFavourites.filter((item) => item.id !== id)
     );
   };
 
   const handelAddFavourites = (char) => {
     if (!isFavourite) {
-      setFavourates((preFav) => [...preFav, char]);
+      setFavourites((preFav) => [...preFav, char]);
     } else {
-      setFavourates((preFavourites) =>
+      setFavourites((preFavourites) =>
         preFavourites.filter((fav) => fav.id !== selectedId)
       );
     }
   };
-
-  //------------- SET FAVOURITES ITEM LOCALSTORAGE
-  useEffect(() => {
-    localStorage.setItem("FAVOURITES", JSON.stringify(favourites));
-  }, [favourites]);
-
-  //---------- Fechting Data
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-    async function getData() {
-      try {
-        setIsLoding(true);
-        const { data } = await axios.get(
-          `https://rickandmortyapi.com/api/character?name=${query}`,
-          { signal }
-        );
-        setCharacters(data.results.slice(0, 6));
-      } catch (err) {
-        if (!axios.isCancel()) {
-          setCharacters([]);
-          toast.error(err.response.data.error);
-        }
-      } finally {
-        setIsLoding(false);
-      }
-    }
-    if (query.length < 3) {
-      setCharacters([]);
-      return;
-    }
-    getData();
-    // ---- clean up fetch api  (re-redder => searchbox)
-    return () => {
-      controller.abort();
-    };
-  }, [query]);
 
   return (
     <div className="app">
