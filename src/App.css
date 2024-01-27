@@ -7,31 +7,60 @@
 }
 /*---------------- Navbar --------------*/
 .navbar {
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 2rem;
   background-color: var(--slate-700);
   padding: 1rem;
   border-radius: 1rem;
   margin-bottom: 1rem;
+  row-gap: 0.5rem;
 }
 
 .navbar__logo {
   /* color: var(--slate-300);
   font-weight: 700; */
-  width:9rem;
+  width:7rem;
+  grid-column: 1/2;
+  grid-row: 1/2;
+  
 }
 .navbar__logo img{
   width: 100%;
 }
+.search-icon{
+  width: 2rem;
+  color: var(--slate-400);
+  grid-column: 2/3;
+  grid-row: 1/2;
+  /* display: none; */
+
+}
 .navbar__result {
   color: var(--slate-400);
+  grid-column: 1/3;
+  grid-row: 2/3;
+  margin: auto;
+  display: none;
+  
+}
+.navbar__result.active{
+  display: block;
 }
 .navbar .heart {
   position: relative;
   color: var(--rose-500);
+  grid-column: 3/4;
+  grid-row: 1/2;
+  /* background-color: red; */
+  width: 2rem;
+  height: 2rem;
+  
 }
 .navbar .heart .icon {
+  position: relative;
   width: 2rem;
   height: 2rem;
 }
@@ -48,6 +77,57 @@
   align-items: center;
   justify-content: center;
   padding: 1px 4px;
+}
+
+.text-field {
+  display: none;
+  padding: 0.7rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--slate-100);
+  background-color: var(--slate-500);
+  font-size: 1.1rem;
+  grid-column: 1/4;
+  grid-row: 3/4;
+  margin: auto;
+}
+.text-field.search {
+  display: inline-block;
+}
+.text-field::placeholder {
+  color: var(--slate-400);
+}
+
+/* ---------------------------- Media for Navbar --------------------- */
+@media (min-width: 760px) {
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .navbar__logo {
+    width:9rem;
+  }
+ 
+  .search-icon{
+      display: none;
+  
+  }
+  .navbar__result {
+    
+    display: inline-block;
+    
+  }
+  .navbar .heart {
+    width:auto;
+    height:auto;
+    
+  }
+  .text-field {
+    display: block;
+    font-size: 1.1rem;
+     }
+ 
 }
 
 /* ------ Main Section -----*/

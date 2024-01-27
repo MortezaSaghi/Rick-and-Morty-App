@@ -54,7 +54,7 @@ export default function ChracterDetail({
     );
 
   return (
-    <div style={{ flex: 1 }}>
+    <div  style={{ flex: 1 }}>
       <CharacterInfo
         handelAddFavourites={handelAddFavourites}
         isFavourite={isFavourite}
