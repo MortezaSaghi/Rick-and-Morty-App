@@ -11,6 +11,7 @@ import { Toaster} from "react-hot-toast";
 function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [isShowDetail,setIsShowDetail]=useState(false);
   //--------------------- SET FAVOURITES ITEM LOCALSTORAGE
   // ----------------------- Custom Hook LocalStorage
   const [favourites, setFavourites] = useLocalStorage("FAVOURITES", []);
@@ -60,10 +61,14 @@ function App() {
           selectedId={selectedId}
           characters={characters}
           isLoding={isLoding}
+          isShowDetail={isShowDetail}
+          setIsShowDetail={setIsShowDetail}
           onSelectedCharacter={handelSelectCharacter}
         />
         <ChracterDetail
           selectedId={selectedId}
+          isShowDetail={isShowDetail}
+          setIsShowDetail={setIsShowDetail}
           handelAddFavourites={handelAddFavourites}
           isFavourite={isFavourite}
         />

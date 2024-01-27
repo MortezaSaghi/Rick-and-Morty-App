@@ -133,15 +133,49 @@
 /* ------ Main Section -----*/
 
 .main {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 2rem;
+  /* display: flex;
+  justify-content: space-between; */
+  width: 90%;
+  margin: auto;
+  /* gap: 2rem; */
+}
+@media (min-width:760px){
+  .main{
+    /* width: 100%; */
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+}
+/* ------------ Section Detail --------- */
+.detail-section{
+  display: none;
+}
+.detail-section.show{
+  display: block;
+}
+@media (min-width:760px){
+  .detail-section{
+    display: block;
+    /* flex:1; */
+    width: 50%;
+  }
 }
 
 /*------------Character List Section -----------*/
 .characters-list {
-  width: 40%;
+  /* width: 40%; */
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  /* max-height: 80vh;
+  overflow: auto; */
+}
+.characters-list.show {
+  /* width: 40%; */
+  display: none;
+  width: 100%;
+  margin-bottom: 1rem;
   /* max-height: 80vh;
   overflow: auto; */
 }
@@ -202,18 +236,32 @@
   color: var(--rose-500);
 }
 
+@media (min-width:760px){
+  .characters-list {
+    width: 40%;
+    margin-bottom: 1rem;
+    /* max-height: 80vh;
+    overflow: auto; */
+  }
+  .characters-list.show{
+    display: block;
+    width: 40%;
+    margin-bottom: 1rem;
+  }
+}
+  
 /*------------ Character Detail section --------------*/
 
 .character-detail{
   display: flex ;
-  /* flex-direction: column; */
+  flex-direction: column;
   background-color: var(--slate-800);
   border-radius: 0.5rem;
   overflow: hidden;
   margin-bottom: 2rem;
 }
 .character-detail__img{
-  width: 40%;
+  /* width: 40%; */
   height: auto ;
   max-height: 15rem;
   object-fit: cover;
@@ -270,11 +318,21 @@
 .character-episodes h2{
   color: var(--slate-400);
   margin-bottom: 0.6rem;
-}
+  }
 .character-episodes li{
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: var(--slate-200);
   padding: 0.5rem 0;
+  font-size: 0.8rem;
+}
+
+@media (min-width:760px){
+  .character-detail{
+    flex-direction: row;
+  }
+  .character-episodes li{
+    font-size: 1rem;
+  }
 }

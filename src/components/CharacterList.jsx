@@ -1,12 +1,14 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Children } from "react";
+
 
 export default function CharacterList({
   characters,
   isLoding,
   onSelectedCharacter,
   selectedId,
+  isShowDetail,
+  setIsShowDetail
 }) {
   // console.log(characters);
   if (isLoding) {
@@ -18,7 +20,7 @@ export default function CharacterList({
     );
   }
   return (
-    <div className="characters-list">
+    <div className={`characters-list ${!isShowDetail?"":"show"}`}>
       {characters.map((item) => (
         <CharacterItem
           key={item.id}
@@ -30,7 +32,7 @@ export default function CharacterList({
             className="icon red"
             onClick={() => onSelectedCharacter(item.id)}
           >
-            {selectedId === item.id ? <EyeSlashIcon /> : <EyeIcon />}
+            {selectedId === item.id ? <EyeSlashIcon /> : <EyeIcon onClick={()=>setIsShowDetail(true)} />}
           </button>
         </CharacterItem>
       ))}

@@ -47,6 +47,13 @@ button {
   color: var(--slate-100);
   font-weight: 700;
 }
+.btn-close{
+  color:var(--rose-500);
+}
+.btn-close:hover{
+  font-weight: bold;
+  letter-spacing: 0.01rem;
+}
 .badge{
   white-space:nowrap;
   padding: 0.3rem 1rem;
@@ -55,8 +62,24 @@ button {
   font-weight: 700;
 }
 
+.badge-date{
+  white-space:nowrap;
+  padding: 0.3rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+}
+
 .badge--secondary{
   background-color: var(--slate-600);
+}
+@media (min-width:760px){
+  .badge-date{
+    font-size: 0.8rem;
+  }
+  .btn-close{
+    display: none;
+  }
 }
 /* -----  modal ------ */
 

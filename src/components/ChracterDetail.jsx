@@ -9,6 +9,8 @@ export default function ChracterDetail({
   selectedId,
   handelAddFavourites,
   isFavourite,
+  isShowDetail,
+  setIsShowDetail
 }) {
   const [character, setCharacter] = useState(null);
   const [isLoding, setIsLoding] = useState(false);
@@ -54,11 +56,12 @@ export default function ChracterDetail({
     );
 
   return (
-    <div  style={{ flex: 1 }}>
+    <div className={`detail-section ${isShowDetail?"show":""}`}  >
       <CharacterInfo
         handelAddFavourites={handelAddFavourites}
         isFavourite={isFavourite}
         character={character}
+        setIsShowDetail={setIsShowDetail}
       />
       <CharacterEpisodes episodes={episodes} />
     </div>
@@ -67,9 +70,10 @@ export default function ChracterDetail({
 
 //---------------- Character Info
 
-function CharacterInfo({ handelAddFavourites, isFavourite, character }) {
+function CharacterInfo({ handelAddFavourites, isFavourite, character,setIsShowDetail }) {
   return (
     <div className="character-detail">
+     
       <img
         src={character.image}
         alt={character.name}
@@ -98,6 +102,7 @@ function CharacterInfo({ handelAddFavourites, isFavourite, character }) {
           >
             {!isFavourite ? "Add to Favourite" : "Delete of Favourite"}
           </button>
+          <button className="btn-close" onClick={()=>setIsShowDetail(false)}>close</button>
         </div>
       </div>
     </div>
@@ -140,7 +145,7 @@ function CharacterEpisodes({ episodes }) {
               {String(index + 1).padStart(2, 0)} {item.episode}{" "}
               <strong>{item.name}</strong>
             </div>
-            <div className="badge badge--secondary">{item.air_date}</div>
+            <div className="badge-date badge--secondary">{item.air_date}</div>
           </li>
         ))}
       </ul>
