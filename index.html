@@ -2,9 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./public/icons/rick.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icons/rick.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Search Rick and Morty characters, browse their episodes, and save favourites." />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
     <title>Rick and Morty</title>
+    <!--
+      Sets the theme attribute before React mounts and before first paint,
+      mirroring src/hooks/useTheme.js, so there is no flash of the wrong
+      theme on load. Keep the THEME key and fallback logic in sync with
+      that hook if either changes.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("THEME");
+          var theme = stored
+            ? JSON.parse(stored)
+            : window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+          document.documentElement.dataset.theme = theme;
+        } catch (e) {
+          document.documentElement.dataset.theme = "dark";
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

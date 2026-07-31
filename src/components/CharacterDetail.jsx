@@ -1,16 +1,38 @@
 import CircularProgress from "@mui/material/CircularProgress";
 import { ArrowDownCircleIcon } from "@heroicons/react/24/outline";
-// import { episodes } from "./../../public/data/data";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import PropTypes from "prop-types";
 
-export default function ChracterDetail({
+const characterShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
+  species: PropTypes.string.isRequired,
+  gender: PropTypes.string.isRequired,
+  location: PropTypes.shape({ name: PropTypes.string.isRequired }).isRequired,
+});
+
+const episodeShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  episode: PropTypes.string.isRequired,
+  air_date: PropTypes.string.isRequired,
+  created: PropTypes.string.isRequired,
+});
+
+// Fetches and displays the full detail for the currently selected
+// character, plus the episodes they appear in. Renders a placeholder when
+// nothing is selected yet, and a spinner while the detail/episode requests
+// are in flight.
+export default function CharacterDetail({
   selectedId,
   handelAddFavourites,
   isFavourite,
   isShowDetail,
-  setIsShowDetail
+  setIsShowDetail,
 }) {
   const [character, setCharacter] = useState(null);
   const [isLoding, setIsLoding] = useState(false);
@@ -32,7 +54,7 @@ export default function ChracterDetail({
         );
         setepisodes([getEpisodes].flat().slice(0, 8));
       } catch (err) {
-        toast.error(err.response.data.error);
+        toast.error(err.response?.data?.error ?? "Failed to load character details.");
       } finally {
         setIsLoding(false);
       }
@@ -45,7 +67,7 @@ export default function ChracterDetail({
     return (
       <div style={{ marginLeft: "22%", flex: "1" }}>
         <CircularProgress />
-        <div className="name">Loding...</div>
+        <div className="name">Loading...</div>
       </div>
     );
   if (!character || !selectedId)
@@ -56,7 +78,7 @@ export default function ChracterDetail({
     );
 
   return (
-    <div className={`detail-section ${isShowDetail?"show":""}`}  >
+    <div className={`detail-section ${isShowDetail ? "show" : ""}`}>
       <CharacterInfo
         handelAddFavourites={handelAddFavourites}
         isFavourite={isFavourite}
@@ -68,12 +90,19 @@ export default function ChracterDetail({
   );
 }
 
+CharacterDetail.propTypes = {
+  selectedId: PropTypes.number,
+  handelAddFavourites: PropTypes.func.isRequired,
+  isFavourite: PropTypes.bool.isRequired,
+  isShowDetail: PropTypes.bool.isRequired,
+  setIsShowDetail: PropTypes.func.isRequired,
+};
+
 //---------------- Character Info
 
-function CharacterInfo({ handelAddFavourites, isFavourite, character,setIsShowDetail }) {
+function CharacterInfo({ handelAddFavourites, isFavourite, character, setIsShowDetail }) {
   return (
     <div className="character-detail">
-     
       <img
         src={character.image}
         alt={character.name}
@@ -81,12 +110,13 @@ function CharacterInfo({ handelAddFavourites, isFavourite, character,setIsShowDe
       />
       <div className="character-detail__info">
         <h3 className="name">
-          <span>{character.gender === "Male" ? "👨 " : "👩 "}</span>
+          <span aria-hidden="true">{character.gender === "Male" ? "👨 " : "👩 "}</span>
           <span>{character.name}</span>
         </h3>
         <div className="info">
           <span
             className={`status ${character.status === "Dead" ? "red" : ""}`}
+            aria-hidden="true"
           ></span>
           <span>&nbsp;{character.status}</span>
           <span>&nbsp;- {character.species}</span>
@@ -102,17 +132,30 @@ function CharacterInfo({ handelAddFavourites, isFavourite, character,setIsShowDe
           >
             {!isFavourite ? "Add to Favourite" : "Delete of Favourite"}
           </button>
-          <button className="btn-close" onClick={()=>setIsShowDetail(false)}>close</button>
+          {/* Only shown on mobile (hidden ≥760px via CSS) to return to the list */}
+          <button
+            className="btn-close"
+            onClick={() => setIsShowDetail(false)}
+            aria-label="Close character detail and return to list"
+          >
+            close
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
+CharacterInfo.propTypes = {
+  handelAddFavourites: PropTypes.func.isRequired,
+  isFavourite: PropTypes.bool.isRequired,
+  character: characterShape.isRequired,
+  setIsShowDetail: PropTypes.func.isRequired,
+};
+
 //---------- character episodes
 
 function CharacterEpisodes({ episodes }) {
-
   const [sortEarliest, setSortEarliest] = useState(true);
   let sortedEpisodes;
 
@@ -125,15 +168,18 @@ function CharacterEpisodes({ episodes }) {
       (a, b) => new Date(b.created) - new Date(a.created)
     );
   }
-  
+
   return (
     <div className="character-episodes">
       <div className="title">
         <h2>List of Episodes:</h2>
-        <button>
+        <button
+          onClick={() => setSortEarliest((preValue) => !preValue)}
+          aria-label={sortEarliest ? "Sort episodes: earliest first (active)" : "Sort episodes: latest first (active)"}
+        >
           <ArrowDownCircleIcon
             className="icon"
-            onClick={() => setSortEarliest((preValue) => !preValue)}
+            aria-hidden="true"
             style={{ rotate: sortEarliest ? "0deg" : "180deg" }}
           />
         </button>
@@ -152,3 +198,7 @@ function CharacterEpisodes({ episodes }) {
     </div>
   );
 }
+
+CharacterEpisodes.propTypes = {
+  episodes: PropTypes.arrayOf(episodeShape).isRequired,
+};
