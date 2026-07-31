@@ -6,7 +6,8 @@ built with Vite and the public Rick and Morty API.
 
 ## Features
 
-- **Search** characters by name (live results from the API, 3+ characters).
+- **Search** characters by name (live, debounced results from the API,
+  starting from the first character typed).
 - **Character detail** panel with status, species, last known location, and
   the episodes they appear in (sortable earliest/latest).
 - **Favourites** list, persisted in `localStorage`, with a dedicated modal.
